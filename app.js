@@ -21,4 +21,11 @@ dbconnection.dbConnect();
 
 
 
-app.listen(4000);
+// puerto de la app
+var port=Number(process.env.PORT || 4000);
+
+
+// arrancar la app
+app.listen(port,() => {
+    console.log(`El servidor esta funcionando en el puerto ${port}`);
+});
