@@ -4,7 +4,8 @@
   "description": "app to manage the employer's information ",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "Felix Pujols",
   "license": "ISC",
