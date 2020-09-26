@@ -14,13 +14,14 @@ router.get('/', (req, res) => {
     res.send(data)
   })
   .catch(err => {
-    console.log("Error when retreving the posts  " + err)
+    console.log("Error when retreving the Department  " + err)
   })
 })
 
 // Create
 // post/department
 router.post('/post/department', (req, res) => {
+
     const department =  new Department({
       name: req.body.name,
       time : String(new Date().toISOString().replace('-', '/').split('T')[0].replace('-', '/'))
@@ -30,7 +31,7 @@ router.post('/post/department', (req, res) => {
       res.json(data)
     })
     .catch(err =>{
-      res.json({"message": "Error when creating department"})
+      res.status(400)
     })
 
 })
@@ -48,26 +49,13 @@ router.delete('/department/:id', function (req, res) {
       res.json("Department deleted")
     })
     .catch(err => {
-      res.json({"message": "Error deleting department"})
+      res.status(400)
     })
   })
 })
 
 
-// Get department
-// department/:id
-router.get('/department/:id', function(req, res, next) {
-    const departmentId = req.params.id;
-    Department.findOne({_id: departmentId}, function(err, post) {
-      if (err) {
-        console.log("Error when retreving the department  " + err)
-      }
-    })
-    .populate('employee').sort()
-    .exec(function(err, department) {
-    res.json(department.employee);
-    });
-});
+
 
 // Update department
 // department/:id
@@ -82,10 +70,12 @@ router.put('/department/:id', function(req, res, next) {
     res.json("Department updated")
   })
   .catch( err => {
-    res.json({"message": "Error when updating department"})
+    res.status(400)
   } )
 
 });
+
+
 
 
 
@@ -104,9 +94,26 @@ router.put('/department/:id', function(req, res, next) {
 
 
 
+
+// Get employee
+// employee/:id
+router.get('/employee/:id', function(req, res, next) {
+    const departmentId = req.params.id;
+    Department.findOne({_id: departmentId}, function(err, post) {
+      if (err) {
+        console.log("Error when retreving the department  " + err)
+      }
+    })
+    .populate('employee').sort()
+    .exec(function(err, department) {
+    res.json(department.employee);
+    });
+});
+
+
 // Create employee
 // post/employee
-router.post('/post/employee/:id', function(req, res, next) {
+router.post('/employee/:id', function(req, res, next) {
   const name         = req.body.name;
   const age          = req.body.age;
   const position     = req.body.position;
@@ -136,7 +143,7 @@ router.post('/post/employee/:id', function(req, res, next) {
       })
      })
      .catch(error => {
-       res.json({"message": "Error when updating department"})
+       res.status(400)
      })
 
 });
@@ -145,8 +152,8 @@ router.post('/post/employee/:id', function(req, res, next) {
 
 // Update employee
 // employee/:id
-router.put('/employee/update', function(req, res, next) {
-  const employeeId = req.body.employeeId;
+router.put('/employee/:id', function(req, res, next) {
+  const employeeId = req.params.id;
 
   const updateEmployee = {
      name         : req.body.name,
@@ -154,14 +161,13 @@ router.put('/employee/update', function(req, res, next) {
      position     : req.body.position,
      supervisor   : req.body.supervisor,
      schedule     : req.body.schedule,
-     departmentId : req.params.id
   }
   Employee.findOneAndUpdate({_id: employeeId}, updateEmployee, {new: true})
   .then(data => {
     res.send(data)
   })
   .catch( err => {
-    res.json({"message": "Error when updating department"})
+    res.status(400)
   } )
 
 });
@@ -181,7 +187,7 @@ router.delete('/employee/:id', function (req, res) {
       res.json("Employee deleted")
     })
     .catch(err => {
-      res.json({"message": "Error deleting employee"})
+      res.status(400)
     })
   })
 })
