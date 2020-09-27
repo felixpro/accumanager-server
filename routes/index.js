@@ -3,6 +3,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Department = require('../models/department')
 const Employee = require('../models/employee')
+const Theme = require('../models/theme')
 
 
 
@@ -193,6 +194,49 @@ router.delete('/employee/:id', function (req, res) {
 })
 
 
+// Update Theme
+// Theme/:id
+router.put('/theme', function(req, res, next) {
+  const updateTheme = {
+    name   :  req.body.name,
+  }
+  Theme.findOneAndUpdate({_id: '5f6fa394f7ab7f13600d0aa1'}, updateTheme, {new: true})
+  .then(data => {
+    res.send(data)
+  })
+  .catch( err => {
+    res.status(400)
+  } )
+});
+
+
+// Create
+// post/department
+router.post('/theme', (req, res) => {
+    const theme =  new Theme({
+      name: req.body.name,
+      time : String(new Date().toISOString().replace('-', '/').split('T')[0].replace('-', '/'))
+    })
+    theme.save()
+    .then(data => {
+      res.json(data)
+    })
+    .catch(err =>{
+      res.status(400)
+    })
+
+})
+
+// Home
+router.get('/theme', (req, res) => {
+  Theme.find()
+  .then(data => {
+    res.send(data)
+  })
+  .catch(err => {
+    console.log("Error when retreving the Department  " + err)
+  })
+})
 
 
 module.exports = router;
